@@ -1566,3 +1566,151 @@ input, select, textarea { font-family: inherit; }
 
 .fade-in { animation: fadeIn 400ms ease-out both; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+/* ============= SIMULATION SCREEN ============= */
+
+/* Dataset picker */
+.sim-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.sim-pick-btn {
+  appearance: none;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-md);
+  padding: 6px 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: background 120ms, color 120ms, border-color 120ms;
+  white-space: nowrap;
+}
+.sim-pick-btn:hover { background: var(--bg-inset); color: var(--ink); }
+.sim-pick-btn[data-active="true"] {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+/* tint by risk of last row */
+.sim-pick-btn[data-active="true"][data-risk="1"] { background: var(--c-warn);  border-color: var(--c-warn);  color: #fff; }
+.sim-pick-btn[data-active="true"][data-risk="2"] { background: var(--c-crit);  border-color: var(--c-crit);  color: #fff; }
+.sim-pick-btn[data-active="true"][data-risk="3"] { background: var(--hi-vis);  border-color: var(--hi-vis);  color: #fff; }
+
+/* Main layout */
+.sim-main {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1200px) { .sim-main { grid-template-columns: 1fr; } }
+
+.sim-left  { display: flex; flex-direction: column; gap: 14px; }
+.sim-right { display: flex; flex-direction: column; gap: 14px; }
+
+/* Overall risk panel */
+.sim-risk-panel {
+  border-width: 2px;
+  transition: border-color 500ms;
+}
+.sim-risk-body {
+  padding: 18px 16px 20px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+.sim-risk-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+.sim-risk-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  transition: background 500ms;
+  pointer-events: none;
+}
+
+/* Sensor vote rows */
+.sim-vote-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  padding: 3px 0;
+}
+.sim-vote-label { color: var(--ink-2); }
+.sim-vote-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.sim-vote-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--bg-inset);
+  color: var(--ink-3);
+  min-width: 60px;
+  text-align: center;
+  transition: background 500ms, color 500ms;
+}
+.sim-vote-badge[data-level="1"] { background: var(--c-warn-2); color: var(--c-warn); }
+.sim-vote-badge[data-level="2"] { background: var(--c-crit-2); color: var(--c-crit); }
+.sim-vote-badge[data-level="3"] { background: var(--c-crit-2); color: var(--hi-vis);  border: 1px solid var(--hi-vis); }
+
+/* Sensor chart cards — 5 across */
+.sim-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+@media (max-width: 1400px) { .sim-charts-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px)  { .sim-charts-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* Chart card risk-level border tint */
+.sim-chart-card { transition: border-color 500ms; }
+.sim-chart-card[data-risk-level="1"] { border-color: var(--c-warn); }
+.sim-chart-card[data-risk-level="2"] { border-color: var(--c-crit); }
+.sim-chart-card[data-risk-level="3"] { border-color: var(--hi-vis); }
+
+/* Threshold reference table */
+.sim-ref-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+}
+.sim-ref-table th {
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border-bottom: 1px solid var(--rule);
+}
+.sim-ref-table td {
+  padding: 6px 10px;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--rule-2);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.sim-ref-table td:first-child { color: var(--ink); font-size: 11px; }
+.sim-ref-table tr:last-child td { border-bottom: 0; }
