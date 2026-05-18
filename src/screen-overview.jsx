@@ -22,8 +22,8 @@ function ScreenOverview({ goTo }) {
             a silent &ldquo;safe.&rdquo;
           </p>
           <div className="hero-cta">
-            <button className="btn" onClick={() => goTo("operator")}>
-              View operator dashboard <span className="arrow">→</span>
+            <button className="btn" onClick={() => goTo("simulation")}>
+              View data simulation <span className="arrow">→</span>
             </button>
             <button className="btn ghost" onClick={() => goTo("failure")}>
               Run a failure scenario
