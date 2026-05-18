@@ -16,12 +16,12 @@ const SCREENS = [
   { id: "overview",     n: "01", label: "Overview" },
   { id: "architecture", n: "02", label: "Architecture" },
   { id: "map",          n: "03", label: "Map · Maribyrnong" },
-  { id: "operator",     n: "04", label: "Operator" },
+  { id: "simulation",   n: "04", label: "Data simulation" },
+  // { id: "operator",     n: "05", label: "Operator" },
   { id: "device",       n: "05", label: "Household device" },
   { id: "alerts",       n: "06", label: "Resident alerts" },
   { id: "failure",      n: "07", label: "Failure sim" },
   { id: "community",    n: "08", label: "Community / backup" },
-  { id: "simulation",   n: "09", label: "Data simulation" },
 ];
 
 function App() {
@@ -245,7 +245,7 @@ function pageHeadFor(screen, tw) {
       ],
     },
     simulation: {
-      eyebrow: ["§09", "Simulation", "Data-driven"],
+      eyebrow: ["§04", "Simulation", "Data-driven"],
       title: <>Real-time <em>flood risk</em> analysis across 10 datasets.</>,
       sub: "Animate all five sensor streams step-by-step. Watch risk levels transition and drainage blockage emerge in real time.",
       meta: [
