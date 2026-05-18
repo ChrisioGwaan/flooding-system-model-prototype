@@ -21,6 +21,7 @@ const SCREENS = [
   { id: "alerts",       n: "06", label: "Resident alerts" },
   { id: "failure",      n: "07", label: "Failure sim" },
   { id: "community",    n: "08", label: "Community / backup" },
+  { id: "simulation",   n: "09", label: "Data simulation" },
 ];
 
 function App() {
@@ -85,6 +86,7 @@ function App() {
         {screen === "alerts"       && <ScreenAlerts persona={tw.persona} scenario={tw.scenario} speed={tw.speed} />}
         {screen === "failure"      && <ScreenFailure scenario={tw.scenario} setScenario={(v) => setTweak("scenario", v)} speed={tw.speed} />}
         {screen === "community"    && <ScreenCommunity />}
+        {screen === "simulation"   && <ScreenSimulation />}
       </main>
 
       <footer className="foot">
@@ -240,6 +242,16 @@ function pageHeadFor(screen, tw) {
         { k: "Layers", v: "7" },
         { k: "Wardens", v: "38" },
         { k: "Print cards", v: "2,300" },
+      ],
+    },
+    simulation: {
+      eyebrow: ["§09", "Simulation", "Data-driven"],
+      title: <>Real-time <em>flood risk</em> analysis across 10 datasets.</>,
+      sub: "Animate all five sensor streams step-by-step. Watch risk levels transition and drainage blockage emerge in real time.",
+      meta: [
+        { k: "Datasets", v: "10" },
+        { k: "Steps", v: "50" },
+        { k: "Sources", v: "5" },
       ],
     },
   };
