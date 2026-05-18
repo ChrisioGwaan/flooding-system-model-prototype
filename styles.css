@@ -714,6 +714,23 @@ input, select, textarea { font-family: inherit; }
 [data-theme="dark"] .mzt-id, [data-theme="dark"] .mzt-sub { color: var(--ink-3); }
 [data-theme="dark"] .mzt-name { color: var(--ink); }
 
+/* River name hover tooltip */
+.leaflet-tooltip.river-label-tip {
+  background: rgba(255,255,255,0.88);
+  border: 1px solid #2979c8;
+  color: #2979c8;
+  font-family: 'IBM Plex Mono',monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+.leaflet-tooltip.river-label-tip::before { border-top-color: #2979c8; }
+[data-theme="dark"] .leaflet-tooltip.river-label-tip {
+  background: rgba(20,23,28,0.88);
+}
+
 /* Sensor div-icon markers */
 .sensor-div-root { background: transparent !important; border: none !important; }
 .sensor-core {

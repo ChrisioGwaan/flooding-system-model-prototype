@@ -9,53 +9,92 @@ function ScreenMap({ scenario }) {
 
   const zoneById = Object.fromEntries(ZONES.map(z => [z.id, z]));
 
-  /* Approximate real-world floodplain polygons along Maribyrnong River */
+  /*
+   * Floodplain polygons derived from real suburb boundaries (Nominatim / OSM).
+   * Each zone covers the low-lying riverside area of its suburb.
+   *
+   * Z-01 Maribyrnong Flats     — east bank, Maribyrnong suburb central reach
+   * Z-02 Footscray Riverside   — both banks, Footscray southern reach
+   * Z-03 Avondale Heights West — west bank, Avondale Heights (above Aberfeldie)
+   * Z-04 Maidstone South       — west bank, Maidstone lower reach
+   * Z-05 Essendon Lowlands     — east bank, Aberfeldie / Essendon northern reach
+   */
   const GEO_ZONES = [
     {
       id: "Z-01",
       latlngs: [
-        [-37.747, 144.872], [-37.751, 144.877], [-37.758, 144.882],
-        [-37.766, 144.883], [-37.770, 144.878], [-37.769, 144.871],
-        [-37.762, 144.865], [-37.752, 144.865],
+        [-37.761, 144.875], [-37.764, 144.879], [-37.768, 144.883],
+        [-37.773, 144.887], [-37.778, 144.891], [-37.781, 144.887],
+        [-37.777, 144.882], [-37.771, 144.878], [-37.765, 144.873],
       ],
     },
     {
       id: "Z-02",
       latlngs: [
-        [-37.788, 144.886], [-37.793, 144.890], [-37.800, 144.896],
-        [-37.806, 144.903], [-37.809, 144.907], [-37.809, 144.895],
-        [-37.802, 144.882], [-37.793, 144.879],
+        [-37.788, 144.880], [-37.793, 144.884], [-37.800, 144.891],
+        [-37.807, 144.900], [-37.813, 144.910], [-37.815, 144.906],
+        [-37.808, 144.896], [-37.800, 144.886], [-37.792, 144.879],
       ],
     },
     {
       id: "Z-03",
       latlngs: [
-        [-37.737, 144.849], [-37.742, 144.861], [-37.750, 144.865],
-        [-37.757, 144.860], [-37.755, 144.844], [-37.746, 144.838],
+        [-37.749, 144.849], [-37.753, 144.857], [-37.758, 144.863],
+        [-37.763, 144.868], [-37.766, 144.863], [-37.761, 144.856],
+        [-37.755, 144.850], [-37.750, 144.846],
       ],
     },
     {
       id: "Z-04",
       latlngs: [
-        [-37.762, 144.865], [-37.768, 144.872], [-37.776, 144.877],
-        [-37.784, 144.876], [-37.782, 144.860], [-37.770, 144.855],
+        [-37.770, 144.863], [-37.774, 144.867], [-37.780, 144.872],
+        [-37.785, 144.875], [-37.787, 144.870], [-37.783, 144.865],
+        [-37.777, 144.861], [-37.771, 144.859],
       ],
     },
     {
       id: "Z-05",
       latlngs: [
-        [-37.729, 144.876], [-37.734, 144.888], [-37.742, 144.887],
-        [-37.745, 144.878], [-37.741, 144.868], [-37.731, 144.869],
+        [-37.733, 144.872], [-37.737, 144.877], [-37.742, 144.881],
+        [-37.747, 144.884], [-37.749, 144.879], [-37.744, 144.874],
+        [-37.739, 144.870], [-37.735, 144.868],
       ],
     },
   ];
 
-  /* Sensor field positions (approximate) */
+  /*
+   * Maribyrnong River centreline — traced from Keilor (upper reaches)
+   * through Brimbank Park horseshoe bend, Avondale Heights, Maribyrnong
+   * suburb, Footscray to the Yarra confluence.
+   */
+  const RIVER_PATH = [
+    [-37.704, 144.810],
+    [-37.712, 144.821],
+    [-37.721, 144.836],
+    [-37.728, 144.843],
+    [-37.732, 144.852],
+    [-37.727, 144.861],
+    [-37.731, 144.866],
+    [-37.738, 144.867],
+    [-37.744, 144.870],
+    [-37.752, 144.872],
+    [-37.761, 144.873],
+    [-37.769, 144.877],
+    [-37.777, 144.881],
+    [-37.784, 144.885],
+    [-37.791, 144.889],
+    [-37.799, 144.893],
+    [-37.806, 144.899],
+    [-37.812, 144.908],
+    [-37.820, 144.923],
+  ];
+
+  /* Sensor field positions aligned to the river gauge / station locations */
   const GEO_SENSORS = [
-    { id: "RG-01", label: "RG-01", lat: -37.742, lng: 144.880 },
-    { id: "RG-02", label: "RG-02", lat: -37.800, lng: 144.891 },
-    { id: "RF-04", label: "RF-04", lat: -37.751, lng: 144.851 },
-    { id: "TT-12", label: "TT-12", lat: -37.805, lng: 144.877 },
+    { id: "RG-01", label: "RG-01", lat: -37.742, lng: 144.870 },
+    { id: "RG-02", label: "RG-02", lat: -37.800, lng: 144.893 },
+    { id: "RF-04", label: "RF-04", lat: -37.755, lng: 144.857 },
+    { id: "TT-12", label: "TT-12", lat: -37.801, lng: 144.875 },
   ];
 
   const LEVEL_COLOR = {
@@ -83,7 +122,7 @@ function ScreenMap({ scenario }) {
     if (!L) { console.warn("Leaflet not loaded"); return; }
 
     const map = L.map(containerRef.current, {
-      center: [-37.771, 144.876],
+      center: [-37.774, 144.878],
       zoom: 13,
       zoomControl: true,
       attributionControl: true,
@@ -97,16 +136,24 @@ function ScreenMap({ scenario }) {
       maxZoom: 19,
     }).addTo(map);
 
+    /* Maribyrnong River highlight — drawn beneath zone polygons */
+    L.polyline(RIVER_PATH, {
+      color:     "#2979c8",
+      weight:    5,
+      opacity:   0.72,
+      lineJoin:  "round",
+      lineCap:   "round",
+    }).addTo(map).bindTooltip("Maribyrnong River", {
+      sticky:    true,
+      className: "river-label-tip",
+    });
+
     /* Flood-zone polygons */
     GEO_ZONES.forEach(gz => {
       const data = zoneById[gz.id];
       const poly = L.polygon(gz.latlngs, polyStyle(gz.id, data, gz.id === "Z-02"));
 
       /* Centroid label (permanent tooltip) */
-      const centroid = gz.latlngs.reduce(
-        (acc, ll) => [acc[0] + ll[0] / gz.latlngs.length, acc[1] + ll[1] / gz.latlngs.length],
-        [0, 0]
-      );
       poly.bindTooltip(
         `<div class="mzt-id">${data.id}</div>` +
         `<div class="mzt-name">${data.name}</div>` +
@@ -176,6 +223,10 @@ function ScreenMap({ scenario }) {
               <span>{l}</span>
             </div>
           ))}
+          <div className="row" style={{ marginTop: 8, borderTop: "1px solid var(--rule)", paddingTop: 8 }}>
+            <span className="sw" style={{ background: "#2979c845", border: "2px solid #2979c8" }} />
+            <span style={{ color: "var(--ink-3)" }}>RIVER</span>
+          </div>
         </div>
 
         {/* Zone detail panel */}
